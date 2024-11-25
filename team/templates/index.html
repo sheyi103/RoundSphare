@@ -8,6 +8,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="Free HTML Templates" name="keywords">
   <meta content="Free HTML Templates" name="description">
+  <meta name="csrf-token" content="{{ csrf_token }}">
 
   <!-- Favicon -->
   <link href="img/favicon.ico" rel="icon">
@@ -137,14 +138,14 @@
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+            {% comment %} <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> {% endcomment %}
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Black  White Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=1 productName='Black White Shadeball' %}">Black  White Shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$120.00</h5><h6 class="text-muted ml-2"><del>$150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -154,6 +155,22 @@
             <small class="fa fa-star text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id='qty1'>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3" onclick="previewOrders(1,'Black White Shadeball', 120, 'qty1')"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
@@ -164,14 +181,14 @@
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+            {% comment %} <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> {% endcomment %}
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">SuperTech shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=2 productName='SuperTech shadeball' %}">SuperTech shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$100.00</h5><h6 class="text-muted ml-2"><del>$150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -181,6 +198,22 @@
             <small class="fa fa-star-half-alt text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
@@ -191,14 +224,14 @@
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+            {% comment %} <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> {% endcomment %}
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Single shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=3 productName='Single shadeball' %}">Single shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$100.00</h5><h6 class="text-muted ml-2"><del>$150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -208,6 +241,22 @@
             <small class="far fa-star text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
@@ -218,14 +267,14 @@
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+            {% comment %} <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> {% endcomment %}
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Triple shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=4 productName='Triple shadeball' %}">Triple shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$200.00</h5><h6 class="text-muted ml-2"><del>$250.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -235,6 +284,22 @@
             <small class="far fa-star text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
@@ -245,14 +310,14 @@
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+            {% comment %} <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> {% endcomment %}
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Quat Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=5 productName='Quat Shadeball' %}">Quat Shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$200.00</h5><h6 class="text-muted ml-2"><del>$300.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -262,13 +327,29 @@
             <small class="fa fa-star text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static '/img/home/6.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/6.png' %}" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -277,9 +358,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Single Pro Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=6 productName='Single Pro Shadeball' %}">Single Pro Shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$100.00</h5><h6 class="text-muted ml-2"><del>$150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -289,13 +370,29 @@
             <small class="fa fa-star-half-alt text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/7.jpg' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/7.png' %}" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -304,9 +401,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">GPT Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=7 productName='GPT Shadeball' %}">GPT Shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$100.00</h5><h6 class="text-muted ml-2"><del>$150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -316,13 +413,29 @@
             <small class="far fa-star text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/8.jpg' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/8.png' %}" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -331,9 +444,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="">Single ultra shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=8 productName='Single ultra shadeball' %}">Single ultra shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            <h5>$100.00</h5><h6 class="text-muted ml-2"><del>$150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -343,13 +456,31 @@
             <small class="far fa-star text-primary mr-1"></small>
             <small>(99)</small>
           </div>
+          <div class="d-flex  align-items-center justify-content-center mb-2 pt-2">
+            <div class="input-group input-group-sm quantity mr-3" style="width: 120px;">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+        </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 <!-- Products End -->
-
+<div class="container-fluid pt-5 pb-3 d-flex justify-content-end">
+  <button class="btn btn-primary" onclick="proceed()"><i class="fa fa-shopping-cart mr-1"></i> Continue</button>
+</div>
 
 <!-- Vendor End -->
 
@@ -442,6 +573,44 @@
 
 <!-- Template Javascript -->
 <script src="{% static 'js/main.js' %}"></script>
+<script>
+  var itemsList = []
+  function previewOrders(productId, name, price, qtyId){
+    console.log("entered.....")
+    item = {};
+    var qty = document.getElementById(qtyId).value
+    console.log(qty)
+    item.name = name;
+    item.id = productId;
+    item.price = price;
+    item.quantity = qty
+    itemsList.push(item)
+    console.log(itemsList)
+  }
+
+  function proceed(){
+    var csrftoken = document.querySelector('[name=csrf-token]').getAttribute('content');
+
+    console.log(itemsList)
+    if(itemsList==[])
+    return;
+    $.ajax({
+      url: '/preview-orders',
+      type: 'post',
+      data: JSON.stringify(itemsList),
+      headers: {
+        'X-CSRFToken': csrftoken // Add CSRF token to the request header
+      },
+      success: function(response) {
+          // Redirect to preview-orders after successful POST
+          window.location.href = '/preview-orders';
+      },
+      error: function(error) {
+          console.log("Error:", error);
+      }
+    })
+  }
+</script>
 </body>
 
 </html>

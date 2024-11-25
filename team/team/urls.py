@@ -23,5 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home.landing_page,  name='home'),
     path('register/', views.register, name='register'),
-    path('login/', views.login, name='login')
+    path('login/', views.login, name='login'),
+    path('order-detail/<int:id>/<str:productName>', home.order_detail, name='order-detail'),
+    path('preview-orders', home.previewOrders, name='preview-orders')
 ]
