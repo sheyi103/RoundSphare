@@ -42,3 +42,19 @@ class CustomLoginForm(forms.Form):
     def clean_password(self):
         password = self.cleaned_data.get('password')
         return password
+    
+class CheckoutForm(forms.Form):
+    firstName = forms.CharField(required=True)
+    lastName = forms.CharField(required=True)
+    email = forms.CharField(required=True)
+    phone = forms.CharField(required=True)
+    address = forms.CharField(required=True)
+    country = forms.ChoiceField(required=True,choices=[
+            ('United States', 'United States'), 
+            ('United Kingdom', 'United Kingdom')
+        ])
+    postcode = forms.CharField(required=True)
+    county = forms.CharField()  
+    card = forms.CharField(required=True)
+    cvv = forms.CharField(required=True)
+    expiry = forms.CharField(required=True)  

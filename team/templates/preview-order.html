@@ -293,7 +293,7 @@
                             <h5>Total</h5>
                             <h5>£<span id="grandtotal">{{total}}</span></h5>
                         </div>
-                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" onclick="checkout()">Proceed To Checkout</button>
+                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" onclick="shipping()">Proceed To Checkout</button>
                     </div>
                 </div>
             </div>
@@ -419,7 +419,7 @@
             document.getElementById('grandtotal').innerText = Number(subb)-10
         }
 
-        function checkout(){
+        function shipping(){
             var table = document.getElementById('table')
             var orderList = []
             for(i=1; i<table.rows.length; i++){
@@ -433,6 +433,7 @@
                 orderList.push(item)
             }
 
+            console.log("/hey..........")
             console.log(orderList)
             $.ajax({
                 url: "/shipping",
