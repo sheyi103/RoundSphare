@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,7 +82,36 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'mydatabase',  # Change to your database name
+    #     'USER': 'myuser',  # Change to your MySQL username
+    #     'PASSWORD': 'mypassword',  # Change to your MySQL password
+    #     'HOST': 'localhost',  # Can be an IP address or 'localhost' for local MySQL
+    #     'PORT': '3306',  # Default MySQL port; modify if needed
+    # }
 }
+
+
+"""Below configuration are for database connectivity. Comment and uncomment you choices"""
+#This configuration is for MYSql
+#SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost/dbname'
+
+#This configuration is for MYSql
+# SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3'
+
+# engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
+
+# # Create session factory
+# SessionFactory = sessionmaker(bind=engine)
+
+# # This will provide a session for accessing the database
+# def get_db_session():
+#     session = SessionFactory()
+#     try:
+#         yield session
+#     finally:
+#         session.close()
 
 
 # Password validation

@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, CustomLoginForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import make_password
+from django.contrib import messages
 
 # Registration route handler
 def register(request):
@@ -9,7 +11,11 @@ def register(request):
     
         if form.is_valid():
             print(form.cleaned_data)#result {'name': 'Chibuokem Nwoko', 'email': 'nwokochibuokem@gmail.com', 'password': 'pass', 'password1': 'pass', 'address': '44B Femi Okunnu Estate Phase 1,Lekki, Lagos'}
-            # user = form.save()
+            password = form.cleaned_data.get('password')
+            hashed_password = make_password(password)
+            customer = form.save(commit=False)
+            customer.password = hashed_password
+            customer.save()
             request.session['name'] = form.cleaned_data['email']
             return redirect('home')
     else:
