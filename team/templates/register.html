@@ -52,8 +52,20 @@
                             <!-- email -->
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="name" type="text" class="validate" name="name" value="{{ form.name.value }}" required>
-                                    <label for="name">Name</label>
+                                    <input id="firstName" type="text" class="validate" name="firstName" value="{{ form.firstName.value }}" required>
+                                    <label for="firstName">First Name</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="lastName" type="text" class="validate" name="lastName" value="{{ form.lastName.value }}" required>
+                                    <label for="lastName">Last Name</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="OtherName" type="text" class="validate" name="otherName" value="{{ form.otherName.value }}">
+                                    <label for="otherName">Other Names</label>
                                 </div>
                             </div>
                             <!-- email -->
@@ -74,13 +86,37 @@
                             <div class="row">
                                 <div class="input-field col s12">
                                     <input id="cpassword" type="password" class="validate" name="password1" value="{{ form.password1.value }}" required>
-                                    <label for="cpassword">Password</label>
+                                    <label for="cpassword">Confirm Password</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="cpassword" type="text" class="validate" name="address" value="{{ form.addres.value }}" required>
-                                    <label for="cpassword">Address</label>
+                                    <input id="phone" type="tel" class="validate" name="phone" value="{{ form.phone.value }}" required>
+                                    <label for="phone">Phone</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="address" type="text" class="validate" name="address" value="{{ form.addres.value }}" required>
+                                    <label for="address">Address</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="country" type="text" class="validate" name="country" value="{{ form.country.value }}" required>
+                                    <label for="country">Country</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="county" type="text" class="validate" name="county" value="{{ form.county.value }}" required>
+                                    <label for="county">County</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="postcode" type="text" class="validate" name="postcode" value="{{ form.postcode.value }}" required>
+                                    <label for="postcode">Postcode</label>
                                 </div>
                             </div>
                             <!-- pwd -->
@@ -99,6 +135,13 @@
                                 </div>
                             </div>
                         </form>
+                        {% if messages %}
+                            <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
                     <div class="center-align m-t-20 db">
                         Already have an account? <a href="{% url 'login' %}">Login</a>

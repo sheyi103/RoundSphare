@@ -17,14 +17,18 @@ class RegistrationForm(forms.ModelForm):
     #Check if email exists    
     def clean_email(self):
         email = self.cleaned_data.get('email')
+        print('Email......', email)
         if Customer.objects.filter(email=email).exists():
+            print('Email error..........', email)
             raise forms.ValidationError('A customer with this email already exists.')
         return email
 
     #Check if phone number exists
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
+        print('Phone', phone)
         if Customer.objects.filter(phone=phone).exists():
+            print('Phone error...', phone)
             raise forms.ValidationError('A customer with this phone number already exists.')
         return phone
         
