@@ -5,7 +5,7 @@ from authentication.forms import CheckoutForm
 
 # Home page
 def landing_page(request):
-    name = request.session['name']
+    name = request.session.get('name', '')
     return render(request, "index.html", {"name": name})
 
 # order full detail

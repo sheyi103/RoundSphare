@@ -7,9 +7,11 @@ from django.contrib import messages
 # Registration route handler
 def register(request):
     if request.method == "POST":
+        print('...............1')
         form = RegistrationForm(request.POST)
     
         if form.is_valid():
+            print('After validation..........')
             print(form.cleaned_data)#result {'name': 'Chibuokem Nwoko', 'email': 'nwokochibuokem@gmail.com', 'password': 'pass', 'password1': 'pass', 'address': '44B Femi Okunnu Estate Phase 1,Lekki, Lagos'}
             password = form.cleaned_data.get('password')
             hashed_password = make_password(password)
@@ -18,13 +20,22 @@ def register(request):
             customer.save()
             request.session['name'] = form.cleaned_data['email']
             return redirect('home')
+        else:
+            messages = form.errors
+            return redirect('register')
     else:
         f = RegistrationForm(initial={
-        'name': '',
+        'firstName': '',
+        'lastName': '',
+        'otherName': '',
         'email': '',
         'password': '',
         'password1': '',
-        'address': ''
+        'phone': '',
+        'address': '',
+        'country': '',
+        'county': '',
+        'postcode': ''
         })
         return render(request, 'register.html', {'form': f})
     
