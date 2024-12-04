@@ -134,7 +134,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/1.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product1.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -143,9 +143,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=1 productName='Black White Shadeball' %}">Black  White Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product1.id productName=product1.productName %}">{{product1.productName}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£120.00</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
+            <h5>£{{product1.price}}</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -169,7 +169,7 @@
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3" onclick="previewOrders(1,'Black White Shadeball', 120, 'qty1')"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product1.imageId}}','{{product1.productName}}', '{{product1.price}}', 'qty1')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -177,7 +177,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/2.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product2.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -186,9 +186,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=2 productName='SuperTech shadeball' %}">SuperTech shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product2.id productName=product2.productName %}">{{product2.productName}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£100.00</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
+            <h5>£{{product2.price}}</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -205,14 +205,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id='qty2'>
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product2.imageId}}','{{product2.productName}}', '{{product2.price}}', 'qty2')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -220,7 +220,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/3.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product3.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -229,9 +229,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=3 productName='Single shadeball' %}">Single shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product3.id productName=product3.productName %}">{{product3.productName}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£100.00</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
+            <h5>£{{product3.price}}</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -248,14 +248,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id="qty3">
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product3.imageId}}','{{product3.productName}}', '{{product3.price}}', 'qty3')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -263,7 +263,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/4.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product4.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -272,9 +272,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=4 productName='Triple shadeball' %}">Triple shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product4.id productName=product4.productName %}">{{product4.productName}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£200.00</h5><h6 class="text-muted ml-2"><del>£250.00</del></h6>
+            <h5>£{{product4.price}}</h5><h6 class="text-muted ml-2"><del>£250.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -291,14 +291,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id="qty4">
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product4.imageId}}','{{product4.productName}}', '{{product4.price}}', 'qty4')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -306,7 +306,7 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/5.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product5.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -315,9 +315,9 @@
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=5 productName='Quat Shadeball' %}">Quat Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product5.id productName=product5.productName %}">Quat Shadeball</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£200.00</h5><h6 class="text-muted ml-2"><del>£300.00</del></h6>
+            <h5>£{{product5.price}}</h5><h6 class="text-muted ml-2"><del>£300.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -334,14 +334,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id="qty5">
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product5.imageId}}','{{product5.productName}}', '{{product5.price}}', 'qty5')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -349,18 +349,16 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/6.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product6.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=6 productName='Single Pro Shadeball' %}">Single Pro Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product6.id productName=product6.productName %}">{{product6.productName}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£100.00</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
+            <h5>£{{product6.price}}</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -377,14 +375,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id="qty6">
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product6.imageId}}','{{product6.productName}}', '{{product6.price}}', 'qty6')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -392,18 +390,16 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/7.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product7.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=7 productName='GPT Shadeball' %}">GPT Shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product7.id productName=product7.productName %}">{{product7.productName}}</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£100.00</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
+            <h5>£{{product7.price}}</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -420,14 +416,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" id="qty7">
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product7.imageId}}','{{product7.productName}}', '{{product7.price}}', 'qty7')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
@@ -435,18 +431,16 @@
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
       <div class="product-item bg-light mb-4">
         <div class="product-img position-relative overflow-hidden">
-          <img class="img-fluid w-100" src="{% static 'img/home/8.png' %}" alt="">
+          <img class="img-fluid w-100" src="{% static 'img/home/'%}{{product8.imageId}}.png" alt="">
           <div class="product-action">
             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
           </div>
         </div>
         <div class="text-center py-4">
-          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=8 productName='Single ultra shadeball' %}">Single ultra shadeball</a>
+          <a class="h6 text-decoration-none text-truncate" href="{% url 'order-detail' id=product8.id productName=product8.productName %}">{{product8.productName}}l</a>
           <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5>£100.00</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
+            <h5>£{{product8.price}}</h5><h6 class="text-muted ml-2"><del>£150.00</del></h6>
           </div>
           <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
@@ -463,14 +457,14 @@
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
-                <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                <input type="text" class="form-control bg-secondary border-0 text-center" value="8" id='qty8'>
                 <div class="input-group-btn">
                     <button class="btn btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
             </div>
-            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i></button>
+            <button class="btn btn-primary px-3" onclick="previewOrders('{{product8.imageId}}','{{product8.productName}}', '{{product8.price}}', 'qty8')"><i class="fa fa-shopping-cart mr-1"></i></button>
         </div>
         </div>
       </div>
