@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, CustomLoginForm
+
+from authentication.service import AuthenticationService
+from .forms import RegistrationForm, CustomLoginForm, EditCustomerForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
@@ -63,3 +65,43 @@ def login(request):
             'password': ''
             })      
         return render(request,'login.html', {'form': f})
+    
+def logout(request):
+    del request.session['name']
+    return redirect('home')
+
+
+def editCustomer(request):
+    name = request.session.get('name')
+    print(name)
+    print(request.POST) 
+    service = AuthenticationService()
+    customer = service.getCustomer(name)
+    if(request.method == 'POST'):
+        form = EditCustomerForm(request.POST)
+        if form.is_valid():
+            cleanedData = form.cleaned_data
+            service.editCustomer(cleanedData)
+            request.session['name'] = form.cleaned_data['email']
+            return redirect('home')
+        else:
+            print("Failed")
+            messages = form.errors
+            print(messages)
+            return redirect('edit-customer')
+    else:
+        
+        form = EditCustomerForm(initial={
+            'firstName': customer.firstName,
+            'lastName': customer.lastName,
+            'otherName': customer.otherName if customer.otherName==None else '',
+            'email': customer.email,
+            'phone': customer.phone,
+            'address': customer.address,
+            'country': customer.country,
+            'county': customer.county,
+            'postcode': customer.postcode,
+            
+        })
+        print(customer.country)
+        return render(request, 'edit-customer.html', {'form': form})    

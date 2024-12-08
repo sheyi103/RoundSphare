@@ -1,6 +1,7 @@
 from django import forms
 from .models import Customer
 from django.contrib.auth.forms import AuthenticationForm
+from .service import AuthenticationService
 
 # class RegistrationForm(forms.ModelForm):
 #     class Meta:
@@ -76,3 +77,47 @@ class CheckoutForm(forms.Form):
     card = forms.CharField(required=True)
     cvv = forms.CharField(required=True)
     expiry = forms.CharField(required=True)  
+    
+
+#Edit Customer info
+class EditCustomerForm(forms.Form):
+    firstName = forms.CharField(max_length=100)
+    lastName = forms.CharField(max_length=100)
+    otherName = forms.CharField(max_length=100, required=False)
+    email = forms.EmailField()
+    phone = forms.CharField(max_length=15)
+    address = forms.CharField(widget=forms.Textarea)
+    country = forms.CharField(max_length=100)
+    county = forms.CharField(max_length=100)
+    postcode = forms.CharField(max_length=20)
+    
+    #Clean email  
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email:
+            return email
+        return email
+
+    #Cleaan phone
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        print('Phone', phone)
+        if not phone:
+            raise forms.ValidationError('A customer with this phone number already exists.')
+        return phone
+    
+        
+    #Clean address 
+    def clean_address(self):
+        address = self.cleaned_data.get('address')
+
+        # Validate address
+        if not address:
+            raise forms.ValidationError("Address can not be empty.")
+        return address
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        print(cleaned_data)
+        return cleaned_data
+      

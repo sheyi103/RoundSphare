@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
 
@@ -8,8 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
     <title>Team 3 - Web</title>
-    <link href="{% static '/css/css/style.css' %}" rel="stylesheet">
-    <link href="{% static '/css/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/css/style.css' %}" rel="stylesheet">
     <!-- This page CSS -->
     <link href="{% static 'css/css/pages/authentication.css' %}" rel="stylesheet">
     <!-- This page CSS -->
@@ -42,17 +42,24 @@
             <div class="auth-box">
                 <div id="loginform">
                     <div class="logo">
-                        {% comment %} <span class="db"><img src="../../assets/images/logo-icon.png" alt="logo" /></span> {% endcomment %}
-                        <h5 class="font-medium m-b-20">Sign In to Continue</h5>
+                        <a href="" class="text-decoration-none">
+                          </a>                        <h5 class="font-medium m-b-20">Customer Registration</h5>
                     </div>
                     <!-- Form -->
                     <div class="row">
-                        <form class="col s12" method='POST' action="{% url 'login' %}">
+                        <form class="col s12" method="POST" action="{% url 'register' %}">
                             {% csrf_token %}
                             <!-- email -->
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="email" type="email" class="validate" name="username" value="{{ form.username.value }}" required>
+                                    <input id="name" type="text" class="validate" name="otherName" value="{{ form.otherName.value }}">
+                                    <label for="name">Other Names</label>
+                                </div>
+                            </div>
+                            <!-- email -->
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="email" type="email" class="validate" name="email" value="{{ form.email.value }}" required>
                                     <label for="email">Email</label>
                                 </div>
                             </div>
@@ -64,53 +71,68 @@
                                 </div>
                             </div>
                             <!-- pwd -->
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="cpassword" type="password" class="validate" name="password1" value="{{ form.password1.value }}" required>
+                                    <label for="cpassword">Confirm Password</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="phone" type="tel" class="validate" name="phone" value="{{ form.phone.value }}" required>
+                                    <label for="phone">Phone</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="address" type="text" class="validate" name="address" value="{{ form.addres.value }}" required>
+                                    <label for="address">Address</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="country" type="text" class="validate" name="country" value="{{ form.country.value }}" required>
+                                    <label for="country">Country</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="county" type="text" class="validate" name="county" value="{{ form.county.value }}" required>
+                                    <label for="county">County</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="postcode" type="text" class="validate" name="postcode" value="{{ form.postcode.value }}" required>
+                                    <label for="postcode">Postcode</label>
+                                </div>
+                            </div>
+                            <!-- pwd -->
                             <div class="row m-t-5">
                                 <div class="col s7">
                                     <label>
                                         <input type="checkbox" />
-                                        <span>Remember Me?</span>
+                                        <span>Agree to all Terms</span>
                                     </label>
                                 </div>
-                                {% comment %} <div class="col s5 right-align"><a href="#" class="link" id="to-recover">Forgot Pwd?</a></div> {% endcomment %}
                             </div>
                             <!-- pwd -->
                             <div class="row m-t-40">
                                 <div class="col s12">
-                                    <button class="btn-large w100 blue accent-4" type="submit">Login</button>
+                                    <button class="btn-large w100 red" type="submit">Sign Up</button>
                                 </div>
                             </div>
                         </form>
+                        {% if messages %}
+                            <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
-                    {% comment %} <div class="center-align m-t-20 db">
-                        <a href="#" class="btn indigo darken-1 tooltipped m-r-5" data-position="top" data-tooltip="Login with Facebook"><i class="fab fa-facebook-f"></i></a> <a href="#" class="btn orange darken-4 tooltipped" data-position="top" data-tooltip="Login with Facebook"><i class="fab fa-google-plus-g"></i></a>
-                    </div> {% endcomment %}
                     <div class="center-align m-t-20 db">
-                        Don't have an account? <a href="{% url 'register' %}">Sign Up!</a>
-                    </div>
-                </div>
-                <div id="recoverform">
-                    <div class="logo">
-                        <span class="db"><img src="../../assets/images/logo-icon.png" alt="logo" /></span>
-                        <h5 class="font-medium m-b-20">Recover Password</h5>
-                        <span>Enter your Email and instructions will be sent to you!</span>
-                    </div>
-                    <div class="row">
-                        <!-- Form -->
-                        <form class="col s12" action="index.html">
-                            <!-- email -->
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <input id="email1" type="email" class="validate" required>
-                                    <label for="email1">Email</label>
-                                </div>
-                            </div>
-                            <!-- pwd -->
-                            <div class="row m-t-20">
-                                <div class="col s12">
-                                    <button class="btn-large w100 red" type="submit" name="action">Reset</button>
-                                </div>
-                            </div>
-                        </form>
+                        Already have an account? <a href="{% url 'login' %}">Login</a>
                     </div>
                 </div>
             </div>
@@ -135,22 +157,14 @@
     <!-- All Required js -->
     <!-- ============================================================== -->
     <script src="{% static 'lib/libs/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'js/js/materialize.min.js' %}"></script>
+    <script src="{% static '/js/js/materialize.min.js' %}"></script>
     <!-- ============================================================== -->
     <!-- This page plugin js -->
     <!-- ============================================================== -->
-    <script>
-    $('.tooltipped').tooltip();
-    // ============================================================== 
-    // Login and Recover Password 
-    // ============================================================== 
-    $('#to-recover').on("click", function() {
-        $("#loginform").slideUp();
-        $("#recoverform").fadeIn();
-    });
-    $(function() {
-        $(".preloader").fadeOut();
-    });
+    <script type="text/javascript">
+        $(function() {
+            $(".preloader").fadeOut();
+        });
     </script>
 </body>
 
