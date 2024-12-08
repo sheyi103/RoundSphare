@@ -41,7 +41,7 @@
     <div class="col-lg-6 text-center text-lg-right">
       <div class="d-inline-flex align-items-center">
         <a class="text-body mr-3 bg-light px-2" href="{% url 'login' %}">Login</a>
-        <a class="text-body mr-3 bg-light px-2" href="">API Request?</a>
+        <a class="text-body mr-3 bg-light px-2" data-toggle="modal" data-target="#subscribe">API Request?</a>
       </div>
       <div class="d-inline-flex align-items-center d-block d-lg-none">
         <a href="" class="btn px-0 ml-2">
@@ -114,7 +114,7 @@
           <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
               
               <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                  <a href="" class="btn px-0 text-white">
+                  <a href="{% url 'edit-customer' %}" class="btn px-0 text-white">
                       {{name}}
                   </a>
               </div>
@@ -477,6 +477,32 @@
 </div>
 
 <!-- Vendor End -->
+
+<div class="modal fade" id="subscribe" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">API Subscription</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <form action="/create-checkout-session" method="POST">
+                {% csrf_token %}
+                <p class="card-text">Subscript to Team3 Shadeball API at £50 to get Reservior data for your analytic purposes.</p>
+                <button type="submit" id="checkout-button" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Checkout</button>
+              </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- Footer Start -->
