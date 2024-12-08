@@ -40,30 +40,46 @@ def register(request):
         'postcode': ''
         })
         return render(request, 'register.html', {'form': f})
+
     
-    # Login route handler
+
+# Login route handler
 def login(request):
     if request.method == 'POST':
         form = CustomLoginForm(request.POST)
         
         # verify login details
         if form.is_valid():
-            print(form.cleaned_data)
-            print(form.cleaned_data['username'])
-            request.session['name'] = form.cleaned_data['username']
-            return redirect('home')  
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            
+            # Authenticate user
+            user = authenticate(request, username=email, password=password)
+            
+            if user is not None:  # If authentication is successful
+                request.session['user_id'] = user.id  # Store user info in session
+                request.session['name'] = user.get_full_name()  # Optional: Store full name
+                return redirect('home')  # Redirect to home if successful
+            else:
+                # Redirect back to login with an error
+                f = CustomLoginForm(initial={
+                    'email': email,
+                    'password': ''
+                })
+                return render(request, 'login.html', {"form": f, "error": "Invalid login credentials"})
         else:        
             f = CustomLoginForm(initial={
-            'username': form.data.get('username'),
-            'password': ''
+                'email': form.data.get('email'),
+                'password': ''
             })
             return render(request, 'login.html', {"form": f})   
-        # request is get
+
+    # If request is GET
     else:
         f = CustomLoginForm(initial={
-            'username': '',
+            'email': '',
             'password': ''
-            })      
+        })      
         return render(request,'login.html', {'form': f})
     
 def logout(request):
@@ -104,4 +120,4 @@ def editCustomer(request):
             
         })
         print(customer.country)
-        return render(request, 'edit-customer.html', {'form': form})    
+        return render(request, 'edit-customer.html', {'form': form})
