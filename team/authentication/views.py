@@ -1,6 +1,16 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm, CustomLoginForm
 from django.contrib.auth import authenticate, login
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
+
+# Generate JWT Token
+def generate_jwt_token(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'access': str(refresh.access_token),
+        'refresh': str(refresh)
+    }
 
 # Registration route handler
 def register(request):
@@ -8,28 +18,32 @@ def register(request):
         form = RegistrationForm(request.POST)
     
         if form.is_valid():
-            print(form.cleaned_data)#result {'name': 'Chibuokem Nwoko', 'email': 'nwokochibuokem@gmail.com', 'password': 'pass', 'password1': 'pass', 'address': '44B Femi Okunnu Estate Phase 1,Lekki, Lagos'}
-            # user = form.save()
-            request.session['name'] = form.cleaned_data['email']
+            print(form.cleaned_data) # Debugging print statement
+            
+            # Save user after validation
+            user = form.save()
+
+            # Generate and save JWT token
+            tokens = generate_jwt_token(user)
+            request.session['jwt_token'] = tokens['access']
+            request.session['name'] = user.email
+            
             return redirect('home')
     else:
         f = RegistrationForm(initial={
-        'name': '',
-        'email': '',
-        'password': '',
-        'password1': '',
-        'address': ''
+            'name': '',
+            'email': '',
+            'password': '',
+            'password1': '',
+            'address': ''
         })
         return render(request, 'register.html', {'form': f})
-
-    
 
 # Login route handler
 def login(request):
     if request.method == 'POST':
         form = CustomLoginForm(request.POST)
         
-        # verify login details
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -37,12 +51,16 @@ def login(request):
             # Authenticate user
             user = authenticate(request, username=email, password=password)
             
-            if user is not None:  # If authentication is successful
-                request.session['user_id'] = user.id  # Store user info in session
-                request.session['name'] = user.get_full_name()  # Optional: Store full name
-                return redirect('home')  # Redirect to home if successful
+            if user is not None:  # Successful authentication
+                request.session['user_id'] = user.id
+                request.session['name'] = user.get_full_name()
+
+                # Generate and save JWT token
+                tokens = generate_jwt_token(user)
+                request.session['jwt_token'] = tokens['access']
+
+                return redirect('home')
             else:
-                # Redirect back to login with an error
                 f = CustomLoginForm(initial={
                     'email': email,
                     'password': ''
@@ -61,4 +79,14 @@ def login(request):
             'email': '',
             'password': ''
         })      
-        return render(request, 'login.html', {'form': f})
+        return render(request, 'login.html', {'form': f})  
+
+# API Subscription Endpoint
+def request_api_token(request):
+    if request.method == 'GET':
+        jwt_token = request.session.get('jwt_token', None)
+        
+        if jwt_token:
+            return JsonResponse({"token": jwt_token}, status=200)
+        else:
+            return JsonResponse({"error": "User not authenticated or no token found"}, status=401)
