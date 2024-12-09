@@ -1,11 +1,10 @@
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.shortcuts import render, redirect,reverse
 import json
 from authentication.forms import CheckoutForm
 from .models import Products
-import stripe
+import requests
 
-stripe.api_key = 'sk_test_26PHem9AhJZvU623DfE1x4sd'
 # Home page
 def landing_page(request):
     name = request.session.get('name', '')
@@ -120,7 +119,7 @@ def shipping(request):
         orders = json.loads(request.body.decode('utf-8'))
         print(orders)
         for item in orders:
-            totals = totals + (int(item['price']) * int(item['quantity']))
+            totals = totals + (int(float(item['price'])) * int(float(item['quantity'])))
         request.session['name'] = name
         request.session['shipping'] = orders
         request.session['total'] = totals
@@ -132,25 +131,89 @@ def shipping(request):
         return render(request,'shipping.html', {'name': name, 'total': totals})
     
     
+# def checkout(request):
+#     name = request.session.get('name', '')
+#     print(name)
+#     if(request.method == 'POST'):
+#         request.session['name'] = name
+#         form = CheckoutForm(request.POST)
+#         if form.is_valid():
+#             request.session['name'] = name
+#             orders = request.session['shipping']
+#             print("final order.........")
+#             print(orders)
+#             return render(request, "message.html") 
+#         else:
+#             request.session['name'] = name
+#             return render(request, "shipping.html", {'name': name})
+#     else:
+#         print("Entered checkout..........GET")
+#         request.session['name'] = name 
+#         return redirect('shipping')          
+
 def checkout(request):
-    name = request.session.get('name', '')
-    print(name)
-    if(request.method == 'POST'):
-        request.session['name'] = name
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            request.session['name'] = name
-            orders = request.session['shipping']
-            print("final order.........")
-            print(orders)
-            return render(request, "message.html") 
-        else:
-            request.session['name'] = name
-            return render(request, "shipping.html", {'name': name})
-    else:
-        print("Entered checkout..........GET")
-        request.session['name'] = name 
-        return redirect('shipping')    
+    # Print session data for debugging
+    print("Session contents:")
+    for key, value in request.session.items():
+        print(f"{key}: {value}")
+
+    if request.method == 'POST':
+        # Extract form data
+        first_name = request.POST.get('firstName')
+        last_name = request.POST.get('lastName')
+        email = request.POST.get('email')
+        print(email)
+        full_name = f"{first_name} {last_name}"  # Concatenate first and last name
+
+        # Retrieve the order and total from the session
+        orders = request.session.get('orders')
+        if not orders or not isinstance(orders, list):
+            return JsonResponse({"status": "error", "message": "No orders found in session."}, status=400)
+        
+        # Assuming you want to process the first order in the list
+        order = orders[0]
+        order_id = order.get('id')  # Order ID from session
+        amount = order.get('total')  # Total amount from session
+
+        if not order_id or not amount:
+            return JsonResponse({"status": "error", "message": "Invalid order data in session."}, status=400)
+
+        # Prepare payload for the middleware
+        payload = {
+            "customer_id": "cust_001",  # Replace with dynamic customer ID as needed
+            "email": email,
+            "name": full_name,
+            "order_id": order_id,  # Use ID from session orders
+            "amount": amount,  # Use total from session orders
+            "success_url": "https://example.com/success",  # Replace with actual success URL
+            "cancel_url": "https://example.com/cancel",  # Replace with actual cancel URL
+        }
+
+        try:
+            # Call the checkout middleware
+            response = requests.post(
+                "http://localhost:5000/payment/checkout",  # Middleware endpoint
+                json=payload,
+                headers={"Content-Type": "application/json", "Accept": "application/json"},
+            )
+            response_data = response.json()
+
+            # Handle the middleware response
+            if response.status_code == 200 and "data" in response_data and "checkout_url" in response_data["data"]:
+                checkout_url = response_data["data"]["checkout_url"]
+                print(f"Redirecting to checkout URL: {checkout_url}")
+                return redirect(checkout_url)
+            else:
+                print(f"Error in middleware response: {response_data}")
+                return JsonResponse({"status": "error", "message": "Failed to create checkout session."}, status=500)
+
+        except Exception as e:
+            print(f"Exception occurred while calling middleware: {str(e)}")
+            return JsonResponse({"status": "error", "message": "An error occurred while processing your request."}, status=500)
+    
+    # Redirect to shipping for non-POST requests
+    return redirect('shipping')
+    
     
 def create_checkout_session(request):
     try:
@@ -171,4 +234,4 @@ def create_checkout_session(request):
         print(checkout_session.url)
         return redirect(checkout_session.url)
 
-    return redirect(checkout_session.url)              
+    return redirect(checkout_session.url)           
