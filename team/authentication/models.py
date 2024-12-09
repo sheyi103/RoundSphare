@@ -7,7 +7,7 @@ class Customer(models.Model):
     id = models.IntegerField(primary_key=True, unique=True)
     firstName = models.CharField(max_length=100, db_column='first_name', null=True)
     lastName = models.CharField(max_length=100, db_column='last_name', null=True)
-    otherName = models.CharField(max_length=100, db_column='other_name', null=True)
+    otherName = models.CharField(max_length=100, db_column='other_name', null=True, blank=True)
     email = models.EmailField(unique=True, null=True)
     password = models.CharField(max_length=100, null=True)
     phone = models.CharField(unique=True, max_length=15, null=True)
@@ -16,6 +16,7 @@ class Customer(models.Model):
     county = models.CharField(max_length=200, null=True)
     postcode = models.CharField(max_length=50, null=True)
     createdAt = models.DateTimeField(db_column='created_at', auto_now_add=True)
+
     
     class Meta:
         db_table = 'customer'

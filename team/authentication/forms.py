@@ -10,26 +10,25 @@ from .service import AuthenticationService
 
 # Registration process
 class RegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)  
+    password1 = forms.CharField(widget=forms.PasswordInput)  
+     
     class Meta:
         model = Customer
         fields = ['firstName', 'lastName', 'otherName', 'email', 'password', 'phone', 'address', 'country', 'county', 'postcode']
-        password = forms.CharField(widget=forms.PasswordInput)
-    
+        
+         
     #Check if email exists    
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        print('Email......', email)
         if Customer.objects.filter(email=email).exists():
-            print('Email error..........', email)
             raise forms.ValidationError('A customer with this email already exists.')
         return email
 
     #Check if phone number exists
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        print('Phone', phone)
         if Customer.objects.filter(phone=phone).exists():
-            print('Phone error...', phone)
             raise forms.ValidationError('A customer with this phone number already exists.')
         return phone
         
@@ -51,12 +50,12 @@ class RegistrationForm(forms.ModelForm):
     
     # Login form processor
 class CustomLoginForm(forms.Form):
-    username = forms.CharField(max_length=150, label='Email', widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
+    email = forms.CharField(max_length=150, label='Email', widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
     password = forms.CharField(widget=forms.PasswordInput, label='Password')
 
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        return username
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        return email
 
     def clean_password(self):
         password = self.cleaned_data.get('password')

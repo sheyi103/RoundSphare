@@ -3,26 +3,32 @@ from django.shortcuts import render, redirect
 from authentication.service import AuthenticationService
 from .forms import RegistrationForm, CustomLoginForm, EditCustomerForm
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
+from django.core.mail import send_mail
 
 # Registration route handler
 def register(request):
     if request.method == "POST":
-        print('...............1')
         form = RegistrationForm(request.POST)
     
         if form.is_valid():
-            print('After validation..........')
-            print(form.cleaned_data)#result {'name': 'Chibuokem Nwoko', 'email': 'nwokochibuokem@gmail.com', 'password': 'pass', 'password1': 'pass', 'address': '44B Femi Okunnu Estate Phase 1,Lekki, Lagos'}
             password = form.cleaned_data.get('password')
             hashed_password = make_password(password)
             customer = form.save(commit=False)
             customer.password = hashed_password
             customer.save()
             request.session['name'] = form.cleaned_data['email']
+            
+            message = 'This is to inform you that you have succesfully registered for Team3 Shadeball.'
+            from_email = 'nwokochibuokem@gmail.com'
+            recipient_list = [form.cleaned_data['email']]
+
+            # Send email
+            send_mail('Team3 ShadeBall Registration', message, from_email, recipient_list)
             return redirect('home')
         else:
+            print(form.errors)
             messages = form.errors
             return redirect('register')
     else:
@@ -50,24 +56,25 @@ def login(request):
         
         # verify login details
         if form.is_valid():
+            print("...........")
+            print(form.cleaned_data)
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             
             # Authenticate user
-            user = authenticate(request, username=email, password=password)
-            
-            if user is not None:  # If authentication is successful
-                request.session['user_id'] = user.id  # Store user info in session
-                request.session['name'] = user.get_full_name()  # Optional: Store full name
-                return redirect('home')  # Redirect to home if successful
-            else:
-                # Redirect back to login with an error
+            user = AuthenticationService().getCustomer(email)
+            if not check_password(password, user.password):
                 f = CustomLoginForm(initial={
                     'email': email,
                     'password': ''
                 })
                 return render(request, 'login.html', {"form": f, "error": "Invalid login credentials"})
+        
+            request.session['name'] = user.email
+            return redirect('home')  # Redirect to home if successful
+                
         else:        
+            print(form.errors)
             f = CustomLoginForm(initial={
                 'email': form.data.get('email'),
                 'password': ''

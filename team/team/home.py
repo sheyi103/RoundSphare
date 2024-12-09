@@ -11,7 +11,7 @@ def landing_page(request):
     name = request.session.get('name', '')
     products = Products.objects.all()
     print("Listing products.........")
-    print(products);
+    print(products)
     product1 = {
         'id': products[0].id,
         'productName': products[0].productName,
