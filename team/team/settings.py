@@ -166,3 +166,4 @@ EMAIL_USE_TLS = True  # TLS is required for Gmail
 EMAIL_HOST_USER = 'nwokochibuokem@gmail.com'  # Your Gmail address
 EMAIL_HOST_PASSWORD = 'mhwz mwna lcqz woda'
 DEFAULT_FROM_EMAIL = 'nwokochibuokem@gmail.com'
+STRIPE_SECRET_KEY='sk_test_80aliNYipgfcJnDYsS1YCBPj00QjGjSUin'

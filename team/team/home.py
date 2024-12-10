@@ -2,9 +2,15 @@ from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.shortcuts import render, redirect,reverse
 import json
 from authentication.forms import CheckoutForm
-from .models import Products
+from .models import Products, Order
 import requests
+import stripe
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from .service import Service
+from authentication.service import AuthenticationService
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
 # Home page
 def landing_page(request):
     name = request.session.get('name', '')
@@ -114,7 +120,7 @@ def previewOrders(request):
     
 def shipping(request):
     name = request.session.get('name', '')
-    totals = 0;
+    totals = 0
     if(request.method == 'POST'):
         orders = json.loads(request.body.decode('utf-8'))
         print(orders)
@@ -130,108 +136,244 @@ def shipping(request):
         print(totals)
         return render(request,'shipping.html', {'name': name, 'total': totals})
     
-    
-# def checkout(request):
-#     name = request.session.get('name', '')
-#     print(name)
-#     if(request.method == 'POST'):
-#         request.session['name'] = name
-#         form = CheckoutForm(request.POST)
-#         if form.is_valid():
-#             request.session['name'] = name
-#             orders = request.session['shipping']
-#             print("final order.........")
-#             print(orders)
-#             return render(request, "message.html") 
-#         else:
-#             request.session['name'] = name
-#             return render(request, "shipping.html", {'name': name})
-#     else:
-#         print("Entered checkout..........GET")
-#         request.session['name'] = name 
-#         return redirect('shipping')          
+@csrf_exempt    
+def pay(request):
+    name = request.session.get('name', '')
+    print(name)
+    if(request.method == 'POST'):
+        request.session['name'] = name
+        orders = request.session.get('shipping')
+        print("Order>>>>>>>>>>",orders)
+        total = 0
+        qty = 0
+        for item in orders:
+            total = total + (int(float(item['price'])) * int(float(item['quantity'])))
+            qty = qty + int(item['quantity'])
+            
+        print("Quantity: ", qty)
+        print("Total:........",total)    
+        session = stripe.checkout.Session.create(
+            ui_mode = 'embedded',
+            line_items=[
+                {
+                    "price_data":{
+                        "currency": "gbp",
+                        "product_data": {"name": f"Shadeball Purchase"},
+                        "unit_amount": int((total+10)*100)
+                    },
+                    'quantity': qty,
+                },
+                ],
+                mode='payment',
+                return_url='http://localhost:8000/pay_success',
+        )
+        print("done.........")
+        print(session.id)
+        request.session['psid'] = session.id
+        return JsonResponse({
+            'clientSecret': session.client_secret
+        })
+    else:
+        print("Entered checkout..........GET")
+        request.session['name'] = name 
+        return redirect('shipping')          
 
-def checkout(request):
+# def checkout(request):
+#     # Print session data for debugging
+#     print("Session contents:")
+#     for key, value in request.session.items():
+#         print(f"{key}: {value}")
+
+#     if request.method == 'POST':
+#         # Extract form data
+#         first_name = request.POST.get('firstName')
+#         last_name = request.POST.get('lastName')
+#         email = request.POST.get('email')
+#         print(email)
+#         full_name = f"{first_name} {last_name}"  # Concatenate first and last name
+
+#         # Retrieve the order and total from the session
+#         orders = request.session.get('orders')
+#         if not orders or not isinstance(orders, list):
+#             return JsonResponse({"status": "error", "message": "No orders found in session."}, status=400)
+        
+#         # Assuming you want to process the first order in the list
+#         order = orders[0]
+#         order_id = order.get('id')  # Order ID from session
+#         amount = order.get('total')  # Total amount from session
+
+#         if not order_id or not amount:
+#             return JsonResponse({"status": "error", "message": "Invalid order data in session."}, status=400)
+
+#         # Prepare payload for the middleware
+#         payload = {
+#             "customer_id": "cust_001",  # Replace with dynamic customer ID as needed
+#             "email": email,
+#             "name": full_name,
+#             "order_id": order_id,  # Use ID from session orders
+#             "amount": amount,  # Use total from session orders
+#             "success_url": "https://example.com/success",  # Replace with actual success URL
+#             "cancel_url": "https://example.com/cancel",  # Replace with actual cancel URL
+#         }
+
+#         try:
+#             # Call the checkout middleware
+#             response = requests.post(
+#                 "http://localhost:5000/payment/checkout",  # Middleware endpoint
+#                 json=payload,
+#                 headers={"Content-Type": "application/json", "Accept": "application/json"},
+#             )
+#             response_data = response.json()
+
+#             # Handle the middleware response
+#             if response.status_code == 200 and "data" in response_data and "checkout_url" in response_data["data"]:
+#                 checkout_url = response_data["data"]["checkout_url"]
+#                 print(f"Redirecting to checkout URL: {checkout_url}")
+#                 return redirect(checkout_url)
+#             else:
+#                 print(f"Error in middleware response: {response_data}")
+#                 return JsonResponse({"status": "error", "message": "Failed to create checkout session."}, status=500)
+
+#         except Exception as e:
+#             print(f"Exception occurred while calling middleware: {str(e)}")
+#             return JsonResponse({"status": "error", "message": "An error occurred while processing your request."}, status=500)
+    
+#     # Redirect to shipping for non-POST requests
+#     return redirect('shipping')
+    
+    
+# def subscribe(request):
+#     # Print session data for debugging
+#     print("Session contents:")
+
+#     if request.method == 'POST':
+#         # Extract form data
+#         institutionName = request.POST.get('institution')
+#         email = request.POST.get('email')
+#         print(email)
+#         print(institutionName)
+#         try:
+#             print("check here........")
+#             stripe_customer = stripe.Customer.create(
+#                 email=email,
+#                 name= institutionName
+#             )
+#             session = stripe.checkout.Session.create(
+#             line_items=[{
+#                 "price_data": {
+#                     "currency": "gbp",
+#                     "product_data": {"name": f"Order api"},
+#                     "unit_amount": int(50 * 100)  # Convert to cents
+#                 },
+#                 "quantity": 1
+#             }
+#             ],
+#             mode="payment",
+#             success_url="https://example.com/success",
+#             cancel_url="https://example.com/success",
+#             # expand=["payment_intent"]  # Expand the payment intent
+#         )
+#             print("done.........")
+#             print(session.id)
+#         except Exception as e:
+#             print("Error............")
+#             print(e)
+#             return redirect('shipping')    
+#     # Redirect to shipping for non-POST requests
+#     return redirect('shipping')  
+
+@csrf_exempt
+def subscribe(request):
     # Print session data for debugging
     print("Session contents:")
-    for key, value in request.session.items():
-        print(f"{key}: {value}")
+    domain = 'http://localhost:8000'
 
     if request.method == 'POST':
         # Extract form data
-        first_name = request.POST.get('firstName')
-        last_name = request.POST.get('lastName')
+        institutionName = request.POST.get('institution')
         email = request.POST.get('email')
         print(email)
-        full_name = f"{first_name} {last_name}"  # Concatenate first and last name
-
-        # Retrieve the order and total from the session
-        orders = request.session.get('orders')
-        if not orders or not isinstance(orders, list):
-            return JsonResponse({"status": "error", "message": "No orders found in session."}, status=400)
-        
-        # Assuming you want to process the first order in the list
-        order = orders[0]
-        order_id = order.get('id')  # Order ID from session
-        amount = order.get('total')  # Total amount from session
-
-        if not order_id or not amount:
-            return JsonResponse({"status": "error", "message": "Invalid order data in session."}, status=400)
-
-        # Prepare payload for the middleware
-        payload = {
-            "customer_id": "cust_001",  # Replace with dynamic customer ID as needed
-            "email": email,
-            "name": full_name,
-            "order_id": order_id,  # Use ID from session orders
-            "amount": amount,  # Use total from session orders
-            "success_url": "https://example.com/success",  # Replace with actual success URL
-            "cancel_url": "https://example.com/cancel",  # Replace with actual cancel URL
-        }
-
+        print(institutionName)
         try:
-            # Call the checkout middleware
-            response = requests.post(
-                "http://localhost:5000/payment/checkout",  # Middleware endpoint
-                json=payload,
-                headers={"Content-Type": "application/json", "Accept": "application/json"},
+            print("check here........")
+            session = stripe.checkout.Session.create(
+                ui_mode = 'embedded',
+                line_items=[
+                    {
+                        "price_data":{
+                           "currency": "gbp",
+                           "product_data": {"name": f"API Subscription"},
+                           "unit_amount": int(50 * 100)
+                        },
+                        'quantity': 1,
+                    },
+                ],
+                mode='payment',
+                return_url=domain + '/success',
             )
-            response_data = response.json()
-
-            # Handle the middleware response
-            if response.status_code == 200 and "data" in response_data and "checkout_url" in response_data["data"]:
-                checkout_url = response_data["data"]["checkout_url"]
-                print(f"Redirecting to checkout URL: {checkout_url}")
-                return redirect(checkout_url)
-            else:
-                print(f"Error in middleware response: {response_data}")
-                return JsonResponse({"status": "error", "message": "Failed to create checkout session."}, status=500)
-
+            print("done.........")
+            print(session.id)
+            request.session['sid'] = session.id
+            return JsonResponse({
+                'clientSecret': session.client_secret
+            })
         except Exception as e:
-            print(f"Exception occurred while calling middleware: {str(e)}")
-            return JsonResponse({"status": "error", "message": "An error occurred while processing your request."}, status=500)
-    
+            print("Error............")
+            print(e)
+            return redirect('shipping')    
     # Redirect to shipping for non-POST requests
     return redirect('shipping')
-    
-    
-def create_checkout_session(request):
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            line_items=[
-                {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'pr_1MoBy5LkdIwHu7ixZhnattbh',
-                    'quantity': 1,
-                },
-            ],
-            mode='payment',
-            success_url='YOUR_DOMAIN' + '/success.html',
-            cancel_url='YOUR_DOMAIN' + '/cancel.html',
-        )
-    except Exception as e:
-        print(e,'............')
-        print(checkout_session.url)
-        return redirect(checkout_session.url)
 
-    return redirect(checkout_session.url)           
+
+def success(request):
+    print("...............success")
+    print(request.POST)
+    print(request.session.get('sid'))
+    session = stripe.checkout.Session.retrieve(request.session.get('sid'))
+
+    print(session)
+    status=session.status
+    print(status)
+    customer_email=session.customer_details.email
+    institutionName = session.customer_details.name
+    req ={
+        'name': institutionName,
+        'email': customer_email
+    }
+    response = requests.post(
+        "http://localhost:5000/institutions/",  # Middleware endpoint
+        json=req,
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+    )
+    response_data = response.json()
+    print(response_data)
+    return render(request,'message.html')      
+
+
+def pay_success(request):
+    print("...............pay success")
+    print(request.session.get('name'))
+    session = stripe.checkout.Session.retrieve(request.session.get('psid'))
+    print(session)
+    try:
+        status=session.status
+        email = request.session.get('name')
+        user = AuthenticationService().getCustomer(email)
+        orders = request.session.get('shipping')
+        print(orders)
+        order = [Order(orderId=Service().generate_random_alphanumeric(),
+                    customerId=user.id, 
+                    productId=int(order['id']), 
+                    paymentStatus='Success', 
+                    shippingAddress='',
+                    country = session.customer_details.address.country,
+                    county = '',
+                    postCode=session.customer_details.address.postal_code,
+                    phone=''
+                    ) for order in orders]
+        Order.objects.bulk_create(order)
+    except Exception as e:
+        print(">>>>>>>>>>>>")
+        print(e)    
+    
+    return render(request,'success.html')    
