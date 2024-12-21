@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from team.service import Service
 from django.core.mail import EmailMessage
+# from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
 
 # Registration route handler
 def register(request):
@@ -66,7 +68,6 @@ def register(request):
         'phone': '',
         'address': '',
         'country': '',
-        'county': '',
         'postcode': ''
         })
         return render(request, 'register.html', {'form': f})
@@ -150,7 +151,6 @@ def editCustomer(request):
             'phone': customer.phone,
             'address': customer.address,
             'country': customer.country,
-            'county': customer.county,
             'postcode': customer.postcode,
             
         })
@@ -174,3 +174,20 @@ def confirm(request, id):
             return redirect('home')
                 
         
+# API Subscription Endpoint
+def request_api_token(request):
+    if request.method == 'GET':
+        jwt_token = request.session.get('jwt_token', None)
+        
+        if jwt_token:
+            return JsonResponse({"token": jwt_token}, status=200)
+        else:
+            return JsonResponse({"error": "User not authenticated or no token found"}, status=401)
+        
+# Generate JWT Token
+def generate_jwt_token(user):
+    # refresh = RefreshToken.for_user(user)
+    return {
+        'access': str('refresh.access_token'),
+        'refresh': str('refresh')
+    }        
