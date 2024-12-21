@@ -1,0 +1,66 @@
+[
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 1,
+        "image_id": 1,
+        "image_name": "1",
+        "price": 120.0,
+        "product_name": "Black  White Shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 2,
+        "image_id": 2,
+        "image_name": "2",
+        "price": 100.0,
+        "product_name": "SuperTech shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 3,
+        "image_id": 3,
+        "image_name": "3",
+        "price": 150.0,
+        "product_name": "Single shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 4,
+        "image_id": 4,
+        "image_name": "4",
+        "price": 250.0,
+        "product_name": "Triple shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 5,
+        "image_id": 5,
+        "image_name": "5",
+        "price": 200.0,
+        "product_name": "Quat Shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 6,
+        "image_id": 6,
+        "image_name": "6",
+        "price": 150.0,
+        "product_name": "Single Pro Shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 7,
+        "image_id": 7,
+        "image_name": "7",
+        "price": 150.0,
+        "product_name": "GPT Shadeball"
+    },
+    {
+        "created_at": "2024-12-01 05:12:19.982383",
+        "id": 8,
+        "image_id": 8,
+        "image_name": "8",
+        "price": 150.0,
+        "product_name": "Single ultra shadeball"
+    }
+]

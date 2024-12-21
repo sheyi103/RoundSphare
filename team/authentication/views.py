@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
 from django.core.mail import send_mail
+from team.service import Service
+from django.core.mail import EmailMessage
 
 # Registration route handler
 def register(request):
@@ -17,15 +19,37 @@ def register(request):
             hashed_password = make_password(password)
             customer = form.save(commit=False)
             customer.password = hashed_password
+            codeService = Service()
+            nums = codeService.generate_random_alphanumeric()
+            nums = nums.lower()
+            print("COde: "+nums)
+            customer.confirmationCode = nums
             customer.save()
-            request.session['name'] = form.cleaned_data['email']
+            # request.session['name'] = form.cleaned_data['email']
             
-            message = 'This is to inform you that you have succesfully registered for Team3 Shadeball.'
+            message = f'''<h2>Dear {form.cleaned_data.get('firstName')} </h2><br>Please click the link below to verify your account:<br>
+            <h3><a href="http://127.0.0.1:8000/confirm/{nums}" target="_self">VERIFY</a></h3>
+            <br>Thank you<br>
+            <b>Team3</b>'''
+            # message = 'This is to inform you that you have succesfully registered for Team3 Shadeball.'
             from_email = 'nwokochibuokem@gmail.com'
             recipient_list = [form.cleaned_data['email']]
+            
+            email = EmailMessage(
+                subject='Team3 ShadeBall Registration',
+                body=message,
+                from_email=from_email,
+                to=recipient_list
+            )
+
+            # Set the content type to 'html'
+            email.content_subtype = 'html'
+
+            # Send the email
+            email.send()
 
             # Send email
-            send_mail('Team3 ShadeBall Registration', message, from_email, recipient_list)
+            # send_mail('Team3 ShadeBall Registration', message, from_email, recipient_list)
             return redirect('home')
         else:
             print(form.errors)
@@ -61,14 +85,18 @@ def login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             
-            # Authenticate user
-            user = AuthenticationService().getCustomer(email)
-            if not check_password(password, user.password):
-                f = CustomLoginForm(initial={
+            f = CustomLoginForm(initial={
                     'email': email,
                     'password': ''
                 })
+            
+            # Authenticate user
+            user = AuthenticationService().getCustomer(email)
+            if not check_password(password, user.password):
                 return render(request, 'login.html', {"form": f, "error": "Invalid login credentials"})
+            
+            if user.status=='Inactive':
+                return render(request, 'login.html', {"form": f, "error": "This account has not been activated. Verify your account via the link sent to your email."})
         
             request.session['name'] = user.email
             return redirect('home')  # Redirect to home if successful
@@ -128,3 +156,21 @@ def editCustomer(request):
         })
         print(customer.country)
         return render(request, 'edit-customer.html', {'form': form})
+    
+    
+def confirm(request, id):
+    print("confirm: "+id)
+    if request.method == 'GET':
+        if id:
+            service = AuthenticationService()
+            customerExists = service.getCustomerByConfirmationCode(id)
+            if customerExists:
+                service.confirmCustomer(id)
+                return render(request, 'confirm-message.html',{'messageTitle': 'Success', 'message': 'Email confirmation was successful'})
+            else:
+                return render(request, 'confirm-message.html',{'messageTitle': 'Erroe', 'message': 'Email confirmation was not successful'})
+            
+        else:
+            return redirect('home')
+                
+        

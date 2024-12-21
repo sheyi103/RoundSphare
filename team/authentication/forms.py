@@ -15,7 +15,7 @@ class RegistrationForm(forms.ModelForm):
      
     class Meta:
         model = Customer
-        fields = ['firstName', 'lastName', 'otherName', 'email', 'password', 'phone', 'address', 'country', 'county', 'postcode']
+        fields = ['firstName', 'lastName', 'otherName', 'email', 'password', 'phone', 'address', 'country', 'postcode']
         
          
     #Check if email exists    
@@ -72,7 +72,6 @@ class CheckoutForm(forms.Form):
             ('United Kingdom', 'United Kingdom')
         ])
     postcode = forms.CharField(required=True)
-    county = forms.CharField()  
     card = forms.CharField(required=True)
     cvv = forms.CharField(required=True)
     expiry = forms.CharField(required=True)  
@@ -87,7 +86,6 @@ class EditCustomerForm(forms.Form):
     phone = forms.CharField(max_length=15)
     address = forms.CharField(widget=forms.Textarea)
     country = forms.CharField(max_length=100)
-    county = forms.CharField(max_length=100)
     postcode = forms.CharField(max_length=20)
     
     #Clean email  

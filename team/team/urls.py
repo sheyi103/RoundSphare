@@ -32,5 +32,6 @@ urlpatterns = [
     path('subscribe', home.subscribe, name='subscribe'),
     path('edit-customer', views.editCustomer, name='edit-customer'),
     path('success', home.success, name='success'),
-    path('pay_success', home.pay_success, name='pay_success')
+    path('pay_success', home.pay_success, name='pay_success'),
+    path('confirm/<str:id>', views.confirm, name='confirm')
 ]

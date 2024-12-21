@@ -50,6 +50,9 @@
                         <form class="col s12" method='POST' action="{% url 'login' %}">
                             {% csrf_token %}
                             <!-- email -->
+                            <div class="alert alert-danger" role="alert">
+                                {{error}}
+                              </div>
                             <div class="row">
                                 <div class="input-field col s12">
                                     <input id="email" type="email" class="validate" name="email" value="{{ form.email.value }}" required>

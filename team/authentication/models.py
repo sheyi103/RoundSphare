@@ -13,8 +13,9 @@ class Customer(models.Model):
     phone = models.CharField(unique=True, max_length=15, null=True)
     address = models.CharField(max_length=200, null=True)
     country = models.CharField(max_length=50, null=True)
-    county = models.CharField(max_length=200, null=True)
     postcode = models.CharField(max_length=50, null=True)
+    status = models.CharField(max_length=10, null=False, default='Inactive')
+    confirmationCode = models.CharField(max_length=10, db_column='confirmation_code', null=True)
     createdAt = models.DateTimeField(db_column='created_at', auto_now_add=True)
 
     
@@ -32,8 +33,9 @@ class Customer(models.Model):
             'phone': self.phone,
             'address': self.address,
             'country': self.country,
-            'county': self.county,
             'postcode': self.postcode,
+            'status': self.status,
+            'confirmationCode': self.status,
             'createdAt': self.createdAt.isoformat() if self.createdAt else None,
         }
         return json.dumps(Customer)
