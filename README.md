@@ -4,4 +4,4 @@ Frontend for Team3 project built with Django
 - Install Python 
 - Install Django 
 - Run requirements.txt file 
-- import products.csv (if not included)
+- import products.csv to db (if not included)
