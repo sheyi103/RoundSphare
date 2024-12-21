@@ -3,26 +3,58 @@ from django.shortcuts import render, redirect
 from authentication.service import AuthenticationService
 from .forms import RegistrationForm, CustomLoginForm, EditCustomerForm
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
+from django.core.mail import send_mail
+from team.service import Service
+from django.core.mail import EmailMessage
+# from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
 
 # Registration route handler
 def register(request):
     if request.method == "POST":
-        print('...............1')
         form = RegistrationForm(request.POST)
     
         if form.is_valid():
-            print('After validation..........')
-            print(form.cleaned_data)#result {'name': 'Chibuokem Nwoko', 'email': 'nwokochibuokem@gmail.com', 'password': 'pass', 'password1': 'pass', 'address': '44B Femi Okunnu Estate Phase 1,Lekki, Lagos'}
             password = form.cleaned_data.get('password')
             hashed_password = make_password(password)
             customer = form.save(commit=False)
             customer.password = hashed_password
+            codeService = Service()
+            nums = codeService.generate_random_alphanumeric()
+            nums = nums.lower()
+            print("COde: "+nums)
+            customer.confirmationCode = nums
             customer.save()
-            request.session['name'] = form.cleaned_data['email']
+            # request.session['name'] = form.cleaned_data['email']
+            
+            message = f'''<h2>Dear {form.cleaned_data.get('firstName')} </h2><br>Please click the link below to verify your account:<br>
+            <h3><a href="http://127.0.0.1:8000/confirm/{nums}" target="_self">VERIFY</a></h3>
+            <br>Thank you<br>
+            <b>Team3</b>'''
+            # message = 'This is to inform you that you have succesfully registered for Team3 Shadeball.'
+            from_email = 'nwokochibuokem@gmail.com'
+            recipient_list = [form.cleaned_data['email']]
+            
+            email = EmailMessage(
+                subject='Team3 ShadeBall Registration',
+                body=message,
+                from_email=from_email,
+                to=recipient_list
+            )
+
+            # Set the content type to 'html'
+            email.content_subtype = 'html'
+
+            # Send the email
+            email.send()
+
+            # Send email
+            # send_mail('Team3 ShadeBall Registration', message, from_email, recipient_list)
             return redirect('home')
         else:
+            print(form.errors)
             messages = form.errors
             return redirect('register')
     else:
@@ -36,34 +68,54 @@ def register(request):
         'phone': '',
         'address': '',
         'country': '',
-        'county': '',
         'postcode': ''
         })
         return render(request, 'register.html', {'form': f})
+
     
-    # Login route handler
+
+# Login route handler
 def login(request):
     if request.method == 'POST':
         form = CustomLoginForm(request.POST)
         
         # verify login details
         if form.is_valid():
+            print("...........")
             print(form.cleaned_data)
-            print(form.cleaned_data['username'])
-            request.session['name'] = form.cleaned_data['username']
-            return redirect('home')  
-        else:        
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            
             f = CustomLoginForm(initial={
-            'username': form.data.get('username'),
-            'password': ''
+                    'email': email,
+                    'password': ''
+                })
+            
+            # Authenticate user
+            user = AuthenticationService().getCustomer(email)
+            if not check_password(password, user.password):
+                return render(request, 'login.html', {"form": f, "error": "Invalid login credentials"})
+            
+            if user.status=='Inactive':
+                return render(request, 'login.html', {"form": f, "error": "This account has not been activated. Verify your account via the link sent to your email."})
+        
+            request.session['name'] = user.email
+            return redirect('home')  # Redirect to home if successful
+                
+        else:        
+            print(form.errors)
+            f = CustomLoginForm(initial={
+                'email': form.data.get('email'),
+                'password': ''
             })
             return render(request, 'login.html', {"form": f})   
-        # request is get
+
+    # If request is GET
     else:
         f = CustomLoginForm(initial={
-            'username': '',
+            'email': '',
             'password': ''
-            })      
+        })      
         return render(request,'login.html', {'form': f})
     
 def logout(request):
@@ -99,9 +151,43 @@ def editCustomer(request):
             'phone': customer.phone,
             'address': customer.address,
             'country': customer.country,
-            'county': customer.county,
             'postcode': customer.postcode,
             
         })
         print(customer.country)
-        return render(request, 'edit-customer.html', {'form': form})    
+        return render(request, 'edit-customer.html', {'form': form})
+    
+    
+def confirm(request, id):
+    print("confirm: "+id)
+    if request.method == 'GET':
+        if id:
+            service = AuthenticationService()
+            customerExists = service.getCustomerByConfirmationCode(id)
+            if customerExists:
+                service.confirmCustomer(id)
+                return render(request, 'confirm-message.html',{'messageTitle': 'Success', 'message': 'Email confirmation was successful'})
+            else:
+                return render(request, 'confirm-message.html',{'messageTitle': 'Erroe', 'message': 'Email confirmation was not successful'})
+            
+        else:
+            return redirect('home')
+                
+        
+# API Subscription Endpoint
+def request_api_token(request):
+    if request.method == 'GET':
+        jwt_token = request.session.get('jwt_token', None)
+        
+        if jwt_token:
+            return JsonResponse({"token": jwt_token}, status=200)
+        else:
+            return JsonResponse({"error": "User not authenticated or no token found"}, status=401)
+        
+# Generate JWT Token
+def generate_jwt_token(user):
+    # refresh = RefreshToken.for_user(user)
+    return {
+        'access': str('refresh.access_token'),
+        'refresh': str('refresh')
+    }        

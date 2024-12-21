@@ -28,7 +28,10 @@ urlpatterns = [
     path('order-detail/<int:id>/<str:productName>', home.order_detail, name='order-detail'),
     path('preview-orders', home.previewOrders, name='preview-orders'),
     path('shipping', home.shipping, name='shipping'),
-    path('checkout', home.checkout, name='checkout'),
-    path('create-checkout-session', home.create_checkout_session, name='create_checkout_session'),
-    path('edit-customer', views.editCustomer, name='edit-customer')
+    path('checkout', home.pay, name='checkout'),
+    path('subscribe', home.subscribe, name='subscribe'),
+    path('edit-customer', views.editCustomer, name='edit-customer'),
+    path('success', home.success, name='success'),
+    path('pay_success', home.pay_success, name='pay_success'),
+    path('confirm/<str:id>', views.confirm, name='confirm')
 ]

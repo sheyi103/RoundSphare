@@ -491,10 +491,16 @@
         <div class="row">
           <div class="card">
             <div class="card-body">
-              <form action="/create-checkout-session" method="POST">
+              <form action="/subscribe" method="POST">
                 {% csrf_token %}
                 <p class="card-text">Subscript to Team3 Shadeball API at £50 to get Reservior data for your analytic purposes.</p>
-                <button type="submit" id="checkout-button" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Checkout</button>
+                <div class="form-group">
+                  <label for="institution">Instituion name</label>
+                  <input type="text" class="form-control" id="institution" name="institution" aria-describedby="emailHelp" placeholder="Enter Institution name">
+                </div>
+                <div id="checkout">
+                  <!-- Checkout will insert the payment form here -->
+                </div>
               </form>
             
           </div>
@@ -586,10 +592,10 @@
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'lib/easing/easing.min.js' %}"></script>
 <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-
-
 <script src="{% static '/mail/jqBootstrapValidation.min.js' %}"></script>
 <script src="{% static '/mail/contact.js' %}"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
 
 <!-- Template Javascript -->
 <script src="{% static 'js/main.js' %}"></script>

@@ -18,3 +18,15 @@ class AuthenticationService():
         customer.phone = cleanedData.get('phone')
         customer.save()
         return customer
+    
+    def getCustomerByConfirmationCode(self, code):
+        customer = Customer
+        return customer.objects.filter(confirmationCode=code).exists()
+    
+    def confirmCustomer(self, code):
+        customerObj = Customer
+        customer = customerObj.objects.get(confirmationCode=code)
+        customer.status = 'Active'
+        customer.confirmationCode = None
+        customer.save()
+        return 'Success'
