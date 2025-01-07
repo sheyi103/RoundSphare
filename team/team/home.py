@@ -165,7 +165,7 @@ def pay(request):
                 },
                 ],
                 mode='payment',
-                return_url='http://localhost:8000/pay_success',
+                return_url='http://46.101.92.186:8000/pay_success',
         )
         request.session['psid'] = session.id
         return JsonResponse({
