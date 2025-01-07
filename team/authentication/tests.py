@@ -11,6 +11,7 @@ class LoginViewTest(TestCase):
         # Create a user and hash their password
         password = 'pppppp'
         hashed_password = make_password(password)
+        # Mock Customer obect
         user = Customer.objects.create(
             id=1,
             firstName='Test',
@@ -48,6 +49,7 @@ class LoginViewTest(TestCase):
         # Create a user with a password
         password = 'pppppp'
         hashed_password = make_password(password)
+        # Mock Customer obect
         user = Customer.objects.create(
             id=1,
             firstName='Test',

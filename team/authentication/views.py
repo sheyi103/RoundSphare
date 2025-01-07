@@ -16,6 +16,7 @@ def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
     
+    # Validation form input
         if form.is_valid():
             password = form.cleaned_data.get('password')
             hashed_password = make_password(password)
@@ -24,16 +25,14 @@ def register(request):
             codeService = Service()
             nums = codeService.generate_random_alphanumeric()
             nums = nums.lower()
-            print("COde: "+nums)
             customer.confirmationCode = nums
             customer.save()
-            # request.session['name'] = form.cleaned_data['email']
             
+            # Send confirmation link
             message = f'''<h2>Dear {form.cleaned_data.get('firstName')} </h2><br>Please click the link below to verify your account:<br>
             <h3><a href="http://127.0.0.1:8000/confirm/{nums}" target="_self">VERIFY</a></h3>
             <br>Thank you<br>
             <b>Team3</b>'''
-            # message = 'This is to inform you that you have succesfully registered for Team3 Shadeball.'
             from_email = 'nwokochibuokem@gmail.com'
             recipient_list = [form.cleaned_data['email']]
             
@@ -50,8 +49,6 @@ def register(request):
             # Send the email
             email.send()
 
-            # Send email
-            # send_mail('Team3 ShadeBall Registration', message, from_email, recipient_list)
             return redirect('home')
         else:
             print(form.errors)
@@ -93,6 +90,9 @@ def login(request):
             
             # Authenticate user
             user = AuthenticationService().getCustomer(email)
+            print(user)
+            if(user is None):
+                return render(request, 'login.html', {"form": f, "error": "Invalid email/password"})
             if not check_password(password, user.password):
                 return render(request, 'login.html', {"form": f, "error": "Invalid login credentials"})
             
