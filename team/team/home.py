@@ -77,7 +77,7 @@ def landing_page(request):
 
 # order full detail
 def order_detail(request, id, productName):
-    name = request.session['name']
+    name = request.session.get('name', '')
     product = {
         'name': productName,
         'id': id
@@ -135,23 +135,23 @@ def shipping(request):
         totals = request.session['total']
         print(totals)
         return render(request,'shipping.html', {'name': name, 'total': totals})
-    
+
+# This Method handles Shade ball purchase.
 @csrf_exempt    
 def pay(request):
     name = request.session.get('name', '')
-    print(name)
     if(request.method == 'POST'):
         request.session['name'] = name
         orders = request.session.get('shipping')
-        print("Order>>>>>>>>>>",orders)
         total = 0
         qty = 0
+        
+        # Calculate number of item purchase
         for item in orders:
             total = total + (int(float(item['price'])) * int(float(item['quantity'])))
             qty = qty + int(item['quantity'])
-            
-        print("Quantity: ", qty)
-        print("Total:........",total)    
+        
+        # Stripe Api config    
         session = stripe.checkout.Session.create(
             ui_mode = 'embedded',
             line_items=[
@@ -167,14 +167,11 @@ def pay(request):
                 mode='payment',
                 return_url='http://localhost:8000/pay_success',
         )
-        print("done.........")
-        print(session.id)
         request.session['psid'] = session.id
         return JsonResponse({
             'clientSecret': session.client_secret
         })
     else:
-        print("Entered checkout..........GET")
         request.session['name'] = name 
         return redirect('shipping')          
 
@@ -282,20 +279,17 @@ def pay(request):
 #     # Redirect to shipping for non-POST requests
 #     return redirect('shipping')  
 
+# Institution API subscription
 @csrf_exempt
 def subscribe(request):
-    # Print session data for debugging
-    print("Session contents:")
     domain = 'http://localhost:8000'
 
     if request.method == 'POST':
         # Extract form data
         institutionName = request.POST.get('institution')
         email = request.POST.get('email')
-        print(email)
-        print(institutionName)
         try:
-            print("check here........")
+            # Stripe payment config. Redirect to /success if
             session = stripe.checkout.Session.create(
                 ui_mode = 'embedded',
                 line_items=[
@@ -311,29 +305,20 @@ def subscribe(request):
                 mode='payment',
                 return_url=domain + '/success',
             )
-            print("done.........")
-            print(session.id)
             request.session['sid'] = session.id
             return JsonResponse({
                 'clientSecret': session.client_secret
             })
         except Exception as e:
-            print("Error............")
-            print(e)
             return redirect('shipping')    
     # Redirect to shipping for non-POST requests
     return redirect('shipping')
 
 
 def success(request):
-    print("...............success")
-    print(request.POST)
-    print(request.session.get('sid'))
     session = stripe.checkout.Session.retrieve(request.session.get('sid'))
 
-    print(session)
     status=session.status
-    print(status)
     customer_email=session.customer_details.email
     institutionName = session.customer_details.name
     req ={
@@ -346,7 +331,6 @@ def success(request):
         headers={"Content-Type": "application/json", "Accept": "application/json"},
     )
     response_data = response.json()
-    print(response_data)
     return render(request,'message.html')      
 
 

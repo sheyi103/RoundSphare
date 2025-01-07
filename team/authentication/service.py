@@ -6,8 +6,12 @@ class AuthenticationService():
     
     def getCustomer(self, email):
         customer = Customer
-        custInfo = customer.objects.get(email=email)
-        return custInfo
+        custInfo = None
+        try:
+            custInfo = customer.objects.get(email=email)
+            return custInfo
+        except Exception as e:
+            return custInfo
     
     def editCustomer(self, cleanedData ):
         customerObj = Customer
