@@ -30,7 +30,7 @@ def register(request):
             
             # Send confirmation link
             message = f'''<h2>Dear {form.cleaned_data.get('firstName')} </h2><br>Please click the link below to verify your account:<br>
-            <h3><a href="http://127.0.0.1:8000/confirm/{nums}" target="_self">VERIFY</a></h3>
+            <h3><a href="http://46.101.92.186:8000/confirm/{nums}" target="_self">VERIFY</a></h3>
             <br>Thank you<br>
             <b>Team3</b>'''
             from_email = 'nwokochibuokem@gmail.com'
@@ -168,7 +168,7 @@ def confirm(request, id):
                 service.confirmCustomer(id)
                 return render(request, 'confirm-message.html',{'messageTitle': 'Success', 'message': 'Email confirmation was successful'})
             else:
-                return render(request, 'confirm-message.html',{'messageTitle': 'Erroe', 'message': 'Email confirmation was not successful'})
+                return render(request, 'confirm-message.html',{'messageTitle': 'Error', 'message': 'Email confirmation was not successful'})
             
         else:
             return redirect('home')
